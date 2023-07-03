@@ -139,6 +139,14 @@ class _BottomSheetPlayerState extends State<BottomSheetPlayer> {
                   },
                   icon: Icon(AudioController.instance.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded),
                 ),
+                const SizedBox(width: 5),
+                IconButton(
+                  onPressed: () {
+                    AudioController.instance.seekTo((AudioController.instance.currentPosition - 5000).clamp(0, AudioController.instance.duration));
+                  },
+                  icon: const Icon(Icons.replay_5_rounded),
+                ),
+                const SizedBox(width: 5),
                 Expanded(
                   child: SliderTheme(
                     data: SliderTheme.of(context).copyWith(
@@ -155,6 +163,13 @@ class _BottomSheetPlayerState extends State<BottomSheetPlayer> {
                       inactiveColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     ),
                   ),
+                ),
+                const SizedBox(width: 5),
+                IconButton(
+                  onPressed: () {
+                    AudioController.instance.seekTo((AudioController.instance.currentPosition + 5000).clamp(0, AudioController.instance.duration));
+                  },
+                  icon: const Icon(Icons.forward_5_rounded),
                 ),
               ],
             ),
