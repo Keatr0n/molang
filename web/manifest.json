@@ -1,6 +1,6 @@
 {
-    "name": "molang",
-    "short_name": "molang",
+    "name": "mobook",
+    "short_name": "mobook",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

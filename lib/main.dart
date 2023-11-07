@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:molang/models/db.dart';
-import 'package:molang/pages/home_page.dart';
+import 'package:mobook/models/db.dart';
+import 'package:mobook/pages/home_page.dart';
 import 'package:system_theme/system_theme.dart';
 
 void main() async {
@@ -9,16 +9,16 @@ void main() async {
   await SystemTheme.accentColor.load();
   await DB.instance.init();
 
-  runApp(const MoLang());
+  runApp(const MoBook());
 }
 
-class MoLang extends StatelessWidget {
-  const MoLang({super.key});
+class MoBook extends StatelessWidget {
+  const MoBook({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MoLang',
+      title: 'MoBook',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: SystemTheme.accentColor.accent, brightness: SystemTheme.isDarkMode ? Brightness.dark : Brightness.light),
         brightness: SystemTheme.isDarkMode ? Brightness.dark : Brightness.light,

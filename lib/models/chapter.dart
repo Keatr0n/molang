@@ -1,5 +1,5 @@
-class Lesson {
-  const Lesson(this.id, this.name, this.position, this.isCompleted);
+class Chapter {
+  const Chapter(this.id, this.name, this.position, this.isCompleted);
 
   // the file name
   final String id;
@@ -7,8 +7,8 @@ class Lesson {
   final int position;
   final bool isCompleted;
 
-  factory Lesson.fromJson(Map<String, dynamic> json) {
-    return Lesson(
+  factory Chapter.fromJson(Map<String, dynamic> json) {
+    return Chapter(
       json['id'] as String,
       json['name'] as String,
       json['position'] as int,
@@ -25,8 +25,8 @@ class Lesson {
     };
   }
 
-  Lesson copyWith({String? name, int? position, bool? isCompleted}) {
-    return Lesson(
+  Chapter copyWith({String? name, int? position, bool? isCompleted}) {
+    return Chapter(
       id,
       name ?? this.name,
       position ?? this.position,

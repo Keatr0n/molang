@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:molang/models/db.dart';
-import 'package:molang/widgets/add_lang_widget.dart';
-import 'package:molang/widgets/bottom_sheet_player_widget.dart';
-import 'package:molang/widgets/lang_widget.dart';
+import 'package:mobook/models/db.dart';
+import 'package:mobook/widgets/add_book_widget.dart';
+import 'package:mobook/widgets/bottom_sheet_player_widget.dart';
+import 'package:mobook/widgets/book_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -38,10 +38,10 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 50),
-            Text('MOLANG', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.onSurface)),
+            Text('MOBOOK', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.onSurface)),
             const Divider(),
-            ...DB.instance.langs.values.map((e) => LangWidget(lang: e)).toList(),
-            const AddLangWidget(),
+            ...DB.instance.books.values.map((e) => BookWidget(book: e)).toList(),
+            const AddBookWidget(),
           ],
         ),
       ),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:molang/models/audio_controller.dart';
-import 'package:molang/models/db.dart';
-import 'package:molang/models/lang.dart';
+import 'package:mobook/models/audio_controller.dart';
+import 'package:mobook/models/db.dart';
+import 'package:mobook/models/book.dart';
 
-class LangWidget extends StatelessWidget {
-  const LangWidget({required this.lang, super.key});
+class BookWidget extends StatelessWidget {
+  const BookWidget({required this.book, super.key});
 
-  final Lang lang;
+  final Book book;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class LangWidget extends StatelessWidget {
           children: [
             IconButton.filled(
               onPressed: () {
-                AudioController.instance.play(lang.id);
+                AudioController.instance.play(book.id);
               },
               icon: const Icon(Icons.play_arrow_rounded),
             ),
@@ -28,7 +28,7 @@ class LangWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    lang.name,
+                    book.name,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
@@ -44,8 +44,8 @@ class LangWidget extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Delete Lang'),
-                    content: Text('Are you sure you want to delete ${lang.name}?'),
+                    title: const Text('Delete Book'),
+                    content: Text('Are you sure you want to delete ${book.name}?'),
                     actions: [
                       TextButton(
                         child: const Text('Cancel'),
@@ -54,10 +54,10 @@ class LangWidget extends StatelessWidget {
                       TextButton(
                         child: const Text('Delete'),
                         onPressed: () {
-                          if (AudioController.instance.currentLang?.id == lang.id) {
+                          if (AudioController.instance.currentBook?.id == book.id) {
                             AudioController.instance.stop();
                           }
-                          DB.instance.deleteLang(lang);
+                          DB.instance.deleteBook(book);
                           Navigator.pop(context);
                         },
                       ),

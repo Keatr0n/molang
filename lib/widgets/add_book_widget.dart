@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:molang/models/db.dart';
-import 'package:molang/models/lang.dart';
+import 'package:mobook/models/db.dart';
+import 'package:mobook/models/book.dart';
 
-class AddLangWidget extends StatelessWidget {
-  const AddLangWidget({super.key});
+class AddBookWidget extends StatelessWidget {
+  const AddBookWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class AddLangWidget extends StatelessWidget {
           children: [
             IconButton.filled(
               onPressed: () {
-                showDialog(context: context, builder: (context) => const AddLangDialog());
+                showDialog(context: context, builder: (context) => const AddBookDialog());
               },
               icon: const Icon(Icons.add),
             ),
@@ -28,7 +28,7 @@ class AddLangWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Add Lang",
+                    "Add Book",
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
@@ -44,14 +44,14 @@ class AddLangWidget extends StatelessWidget {
   }
 }
 
-class AddLangDialog extends StatefulWidget {
-  const AddLangDialog({super.key});
+class AddBookDialog extends StatefulWidget {
+  const AddBookDialog({super.key});
 
   @override
-  State<AddLangDialog> createState() => _AddLangDialogState();
+  State<AddBookDialog> createState() => _AddBookDialogState();
 }
 
-class _AddLangDialogState extends State<AddLangDialog> {
+class _AddBookDialogState extends State<AddBookDialog> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController fileController = TextEditingController();
   File? file;
@@ -148,8 +148,8 @@ class _AddLangDialogState extends State<AddLangDialog> {
 
                     // probably use compute or something to make this a little nicer
 
-                    final lang = await Lang.fromFile(file!, nameController.text);
-                    DB.instance.updateLang(lang);
+                    final book = await Book.fromFile(file!, nameController.text);
+                    DB.instance.updateBook(book);
 
                     if (mounted) {
                       setState(() => processingState = 2);

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:molang/models/audio_controller.dart';
-import 'package:molang/models/db.dart';
-import 'package:molang/models/lang.dart';
+import 'package:mobook/models/audio_controller.dart';
+import 'package:mobook/models/db.dart';
+import 'package:mobook/models/book.dart';
 
-class LessonWidget extends StatefulWidget {
-  const LessonWidget({required this.langId, required this.lessonId, super.key});
+class ChapterWidget extends StatefulWidget {
+  const ChapterWidget({required this.bookId, required this.chapterId, super.key});
 
-  final String langId;
-  final String lessonId;
+  final String bookId;
+  final String chapterId;
 
   @override
-  State<LessonWidget> createState() => _LessonWidgetState();
+  State<ChapterWidget> createState() => _ChapterWidgetState();
 }
 
-class _LessonWidgetState extends State<LessonWidget> {
+class _ChapterWidgetState extends State<ChapterWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -24,7 +24,7 @@ class _LessonWidgetState extends State<LessonWidget> {
           children: [
             IconButton.filled(
               onPressed: () {
-                AudioController.instance.play(widget.langId, widget.lessonId);
+                AudioController.instance.play(widget.bookId, widget.chapterId);
               },
               icon: const Icon(Icons.play_arrow_rounded),
             ),
@@ -34,7 +34,7 @@ class _LessonWidgetState extends State<LessonWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    DB.instance.langs[widget.langId]?.lessons[widget.lessonId]?.name ?? "Unknown Lesson",
+                    DB.instance.books[widget.bookId]?.chapters[widget.chapterId]?.name ?? "Unknown Chapter",
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
@@ -44,16 +44,16 @@ class _LessonWidgetState extends State<LessonWidget> {
               ),
             ),
             const Spacer(),
-            if (DB.instance.langs[widget.langId]?.lessons[widget.lessonId]?.isCompleted ?? false)
+            if (DB.instance.books[widget.bookId]?.chapters[widget.chapterId]?.isCompleted ?? false)
               IconButton(
                 icon: const Icon(Icons.check_rounded),
                 onPressed: () {
-                  Lang newLang = DB.instance.langs[widget.langId]!;
-                  newLang = newLang.copyWith(currentLessonId: widget.lessonId);
-                  newLang = newLang.copyWithNewCompletionStatus(false);
-                  newLang = newLang.copyWith(currentLessonId: DB.instance.langs[widget.langId]!.currentLessonId);
+                  Book newBook = DB.instance.books[widget.bookId]!;
+                  newBook = newBook.copyWith(currentChapterId: widget.chapterId);
+                  newBook = newBook.copyWithNewCompletionStatus(false);
+                  newBook = newBook.copyWith(currentChapterId: DB.instance.books[widget.bookId]!.currentChapterId);
 
-                  DB.instance.updateLang(newLang);
+                  DB.instance.updateBook(newBook);
                   if (mounted) setState(() {});
                 },
               ),

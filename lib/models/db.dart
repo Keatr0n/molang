@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:molang/models/job_scheduler.dart';
-import 'package:molang/models/lang.dart';
-import 'package:molang/utils/file_utils.dart';
+import 'package:mobook/models/job_scheduler.dart';
+import 'package:mobook/models/book.dart';
+import 'package:mobook/utils/file_utils.dart';
 
 class DB {
   DB._();
@@ -17,8 +17,8 @@ class DB {
 
   bool _initialized = false;
 
-  final Map<String, Lang> _langs = {};
-  Map<String, Lang> get langs => _langs;
+  final Map<String, Book> _books = {};
+  Map<String, Book> get books => _books;
 
   final JobScheduler _jobScheduler = JobScheduler();
 
@@ -38,9 +38,9 @@ class DB {
 
     final jsonData = jsonDecode(jsonString);
 
-    for (var i = 0; i < jsonData['langs'].length; i++) {
-      final lang = Lang.fromJson(jsonData['langs'][i]);
-      _langs[lang.id] = lang;
+    for (var i = 0; i < jsonData['books'].length; i++) {
+      final book = Book.fromJson(jsonData['books'][i]);
+      _books[book.id] = book;
     }
 
     _initialized = true;
@@ -52,7 +52,7 @@ class DB {
     _updateDbStreamController.add(null);
 
     final jsonString = jsonEncode({
-      'langs': _langs.values.map((e) => e.toJson()).toList(),
+      'books': _books.values.map((e) => e.toJson()).toList(),
     });
 
     await FileUtils.writeLocalFile(fileName, jsonString);
@@ -60,18 +60,18 @@ class DB {
     return;
   }
 
-  void deleteLang(Lang lang) {
-    for (var element in lang.lessons.values) {
+  void deleteBook(Book book) {
+    for (var element in book.chapters.values) {
       FileUtils.deleteLocalFile(element.id);
     }
 
-    _langs.remove(lang.id);
+    _books.remove(book.id);
     _jobScheduler.addJob(save);
   }
 
-  /// This will add a new lang to the DB if it doesn't already exist
-  void updateLang(Lang lang) {
-    _langs[lang.id] = lang;
+  /// This will add a new book to the DB if it doesn't already exist
+  void updateBook(Book book) {
+    _books[book.id] = book;
     _jobScheduler.addJob(save);
   }
 }

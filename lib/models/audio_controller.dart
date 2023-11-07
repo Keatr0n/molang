@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:molang/models/db.dart';
-import 'package:molang/models/lang.dart';
+import 'package:mobook/models/db.dart';
+import 'package:mobook/models/book.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:molang/utils/file_utils.dart';
+import 'package:mobook/utils/file_utils.dart';
 
 enum AudioEvent {
   play,
   pause,
   stop,
   seek,
-  gotLang,
-  lostLang,
+  gotBook,
+  lostBook,
 }
 
 class AudioController {
@@ -25,8 +25,8 @@ class AudioController {
     });
     _player.onPlayerComplete.listen((event) {
       _saveCurrentPosition(true).then((value) {
-        if (currentLang?.nextLesson != null) {
-          setCurrentLang(_currentLangId, currentLang!.nextLesson!.id);
+        if (currentBook?.nextChapter != null) {
+          setCurrentBook(_currentBookId, currentBook!.nextChapter!.id);
         }
       });
       _audioEventStreamController.add(AudioEvent.stop);
@@ -35,8 +35,8 @@ class AudioController {
   static final AudioController _instance = AudioController._();
   static AudioController get instance => _instance;
 
-  String? _currentLangId;
-  Lang? get currentLang => _currentLangId != null ? DB.instance.langs[_currentLangId] : null;
+  String? _currentBookId;
+  Book? get currentBook => _currentBookId != null ? DB.instance.books[_currentBookId] : null;
   final _player = AudioPlayer();
   int _currentPosition = 0;
   int _duration = 0;
@@ -51,31 +51,31 @@ class AudioController {
   Stream<AudioEvent> get onAudioEvent => _audioEventStreamController.stream;
   Stream<int> get onPositionChanged => _positionStreamController.stream;
 
-  void setCurrentLang(String? langId, [String? lessonId]) {
-    _currentLangId = langId;
-    if (lessonId != null) {
-      final newLang = currentLang!.copyWith(currentLessonId: lessonId);
-      DB.instance.updateLang(newLang);
+  void setCurrentBook(String? bookId, [String? chapterId]) {
+    _currentBookId = bookId;
+    if (chapterId != null) {
+      final newBook = currentBook!.copyWith(currentChapterId: chapterId);
+      DB.instance.updateBook(newBook);
     }
-    _audioEventStreamController.add(AudioEvent.gotLang);
+    _audioEventStreamController.add(AudioEvent.gotBook);
   }
 
-  void play([String? langId, String? lessonId]) async {
+  void play([String? bookId, String? chapterId]) async {
     if (isPlaying) {
       await pause();
     }
 
-    if (langId != null) {
-      setCurrentLang(langId, lessonId);
+    if (bookId != null) {
+      setCurrentBook(bookId, chapterId);
     }
 
-    if (_currentLangId == null) return;
+    if (_currentBookId == null) return;
 
-    if (_player.source != null && langId == null && lessonId == null) {
+    if (_player.source != null && bookId == null && chapterId == null) {
       await _player.resume();
-    } else if (currentLang!.currentLesson != null) {
-      await _player.play(DeviceFileSource((await FileUtils.getLocalFile(currentLang!.currentLessonId)).path));
-      _player.seek(Duration(milliseconds: currentLang!.currentLesson!.position));
+    } else if (currentBook!.currentChapter != null) {
+      await _player.play(DeviceFileSource((await FileUtils.getLocalFile(currentBook!.currentChapterId)).path));
+      _player.seek(Duration(milliseconds: currentBook!.currentChapter!.position));
     }
     _audioEventStreamController.add(AudioEvent.play);
   }
@@ -88,7 +88,7 @@ class AudioController {
   Future<void> pause() async {
     _player.pause();
 
-    if (_currentLangId == null) {
+    if (_currentBookId == null) {
       return;
     }
     await _saveCurrentPosition();
@@ -99,19 +99,19 @@ class AudioController {
   void stop() {
     _player.stop();
     _audioEventStreamController.add(AudioEvent.stop);
-    _currentLangId = null;
+    _currentBookId = null;
     _currentPosition = 0;
     _duration = 0;
   }
 
   Future<void> _saveCurrentPosition([bool hasFinished = false]) async {
     final currentPos = await _player.getCurrentPosition();
-    Lang newLang = currentLang!.copyWithNewSeekPosition(currentPos?.inMilliseconds ?? 0);
+    Book newBook = currentBook!.copyWithNewSeekPosition(currentPos?.inMilliseconds ?? 0);
 
     if (((currentPos?.inMilliseconds ?? 1) / _duration) > 0.99 || hasFinished) {
-      newLang = newLang.copyWithNewCompletionStatus(true);
+      newBook = newBook.copyWithNewCompletionStatus(true);
     }
 
-    DB.instance.updateLang(newLang);
+    DB.instance.updateBook(newBook);
   }
 }

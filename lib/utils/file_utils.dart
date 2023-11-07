@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileUtils {
@@ -39,7 +40,7 @@ class FileUtils {
 
       final inputStream = InputFileStream(file.path);
 
-      final archive = ZipDecoder().decodeBuffer(inputStream);
+      final archive = await compute<InputFileStream, Archive>((input) => ZipDecoder().decodeBuffer(input), inputStream);
       // For all of the entries in the archive
 
       final localPath = await getLocalPath();

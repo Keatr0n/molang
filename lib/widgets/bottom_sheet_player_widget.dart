@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:molang/models/audio_controller.dart';
-import 'package:molang/widgets/lesson_widget.dart';
+import 'package:mobook/models/audio_controller.dart';
+import 'package:mobook/widgets/chapter_widget.dart';
 
 class BottomSheetPlayer extends StatefulWidget {
   const BottomSheetPlayer({super.key});
@@ -25,7 +25,7 @@ class _BottomSheetPlayerState extends State<BottomSheetPlayer> {
   void initState() {
     super.initState();
     audioEventStreamSubscription = AudioController.instance.onAudioEvent.listen((event) {
-      if (event == AudioEvent.gotLang) {
+      if (event == AudioEvent.gotBook) {
         setState(() {
           height = minHeight;
         });
@@ -122,7 +122,10 @@ class _BottomSheetPlayerState extends State<BottomSheetPlayer> {
             duration: duration,
             curve: Curves.easeInOutCubicEmphasized,
             child: ListView(
-              children: [for (var lesson in (AudioController.instance.currentLang?.lessons.values.toList() ?? [])) LessonWidget(langId: AudioController.instance.currentLang?.id ?? "", lessonId: lesson.id)],
+              children: [
+                for (var chapter in (AudioController.instance.currentBook?.chapters.values.toList() ?? []))
+                  ChapterWidget(bookId: AudioController.instance.currentBook?.id ?? "", chapterId: chapter.id)
+              ],
             ),
           ),
           Padding(

@@ -1,13 +1,13 @@
 // import 'package:flutter/material.dart';
 
-// class LangPage extends StatefulWidget {
-//   const LangPage({super.key});
+// class BookPage extends StatefulWidget {
+//   const BookPage({super.key});
 
 //   @override
-//   State<LangPage> createState() => _LangPageState();
+//   State<BookPage> createState() => _BookPageState();
 // }
 
-// class _LangPageState extends State<LangPage> {
+// class _BookPageState extends State<BookPage> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
