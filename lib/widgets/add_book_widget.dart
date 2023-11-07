@@ -75,11 +75,37 @@ class _AddBookDialogState extends State<AddBookDialog> {
   @override
   Widget build(BuildContext context) {
     if (file == null) {
-      return const Dialog(child: Center(child: Text('Loading...', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500))));
+      return const Dialog(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Loading...',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
+              CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      );
     }
 
     if (processingState == 1) {
-      return const Dialog(child: Center(child: Text('Unzipping...', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500))));
+      return const Dialog(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Unzipping...',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
+              CircularProgressIndicator(),
+            ],
+          ),
+        ),
+      );
     }
 
     if (processingState == 2) {

@@ -90,12 +90,19 @@ class Book {
     Future<void> findAndAddFiles(Directory directory) async {
       final List<Directory> subDirs = [];
 
+      final pathSeparator = Platform.isWindows ? "\\" : "/";
+
       final contents = await directory.list().toList();
 
       contents.sort((a, b) => a.path.compareTo(b.path));
 
       for (var i = 0; i < contents.length; i++) {
         final element = contents[i];
+
+        // ignore hidden files
+        if (element.path.split(pathSeparator).last.startsWith(".")) {
+          continue;
+        }
 
         if (element is File) {
           if (element.path.split(".").last.toLowerCase().contains("mp3")) {
